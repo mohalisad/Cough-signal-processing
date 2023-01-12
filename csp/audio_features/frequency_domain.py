@@ -19,8 +19,8 @@ __all__ = ['fourier_transform',
 
 def fourier_transform(audio_data: ndarray,
                       n_fft: Optional[Union[int, None]] = None,
-                      hop_length: Union[Optional[int, None]] = None,
-                      win_length: Union[Optional[float, None]] = None,
+                      hop_length: Optional[Union[int, None]] = None,
+                      win_length: Optional[Union[float, None]] = None,
                       window: Optional[str] = 'hann',
                       center: Optional[bool] = True) \
         -> ndarray:
@@ -75,8 +75,8 @@ def fourier_transform(audio_data: ndarray,
 
 def magnitude_spectrogram(audio_data: ndarray,
                           n_fft: Optional[Union[int, None]] = None,
-                          hop_length: Union[Optional[int, None]] = None,
-                          win_length: Union[Optional[float, None]] = None,
+                          hop_length: Optional[Union[int, None]] = None,
+                          win_length: Optional[Union[float, None]] = None,
                           window: Optional[str] = 'hann',
                           center: Optional[bool] = True) \
         -> ndarray:
@@ -122,8 +122,8 @@ def magnitude_spectrogram(audio_data: ndarray,
 
 def power_spectrogram(audio_data: ndarray,
                       n_fft: Optional[Union[int, None]] = None,
-                      hop_length: Union[Optional[int, None]] = None,
-                      win_length: Union[Optional[float, None]] = None,
+                      hop_length: Optional[Union[int, None]] = None,
+                      win_length: Optional[Union[float, None]] = None,
                       window: Optional[str] = 'hann',
                       center: Optional[bool] = True) \
         -> ndarray:

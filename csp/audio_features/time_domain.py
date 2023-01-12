@@ -26,11 +26,13 @@ from numpy import argmax, mean, diff, log, nonzero
 from scipy.signal import blackmanharris, correlate
 from librosa.feature import zero_crossing_rate as librosa_zcr
 
+from typing import Optional
+
 __docformat__ = 'reStructuredText'
 __all__ = ['zero_crossing_rate']
 
 
-def zero_crossing_rate(audio_data: ndarray,
+def zero_crossing_rate(audio_data: np.ndarray,
                        frame_length: Optional[int] = 2048,
                        hop_length: Optional[int] = 512,
                        center: Optional[bool] = True,
@@ -38,7 +40,7 @@ def zero_crossing_rate(audio_data: ndarray,
                        pad: Optional[bool] = True,
                        zero_pos: Optional[bool] = True,
                        axis: Optional[int] = -1) \
-        -> ndarray:
+        -> np.ndarray:
     """Calculates zero crossing rate for each frame.
 
     :param audio_data: Audio data to be used.
@@ -260,11 +262,11 @@ def melfrequency_cepstral_coefficients(mfcc_type,
     
     if mfcc_type == 'lib':
         y, sr = librosa.load(sound_file)
-        mfccs = librosa.feature.mfcc(y, sr = sr)
+        mfccs = librosa.feature.mfcc(y=y, sr = sr)
         #Displaying  the MFCCs
-        librosa.display.specshow(mfccs, sr = sr, x_axis='time')
-        mfcc_delta = librosa.feature.delta(mfcc)
-        mfcc_delta2 = librosa.feature.delta(mfcc, order=2)
+        #librosa.display.specshow(mfccs, sr = sr, x_axis='time')
+        mfcc_delta = librosa.feature.delta(mfccs)
+        mfcc_delta2 = librosa.feature.delta(mfccs, order=2)
         
         return {
                 'mfcc' : mfccs, 
@@ -559,15 +561,12 @@ def logenergy_computation(signal):
     
     #https://dsp.stackexchange.com/questions/17829/the-logarithm-energy-measure-in-speech
     
-    total_energy = []
-    for sub_frame in signal:
-        constant     = 2e-22
-        log_base     = np.log10
-        signal_power = sub_frame**2
-#         flatten      = np.array(sub_frame).flatten()
-        sum_all      = reduce(lambda x, y: (x + y), signal_power)/len(sub_frame) + constant
-        total_energy.append(log_base(sum_all))
-    return total_energy
+    constant     = 2e-22
+    log_base     = np.log10
+    signal_power = signal**2
+#   flatten      = np.array(sub_frame).flatten()
+    sum_all      = reduce(lambda x, y: (x + y), signal_power)/len(signal) + constant
+    return log_base(sum_all)
 
 
 

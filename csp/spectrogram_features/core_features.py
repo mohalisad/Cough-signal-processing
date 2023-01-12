@@ -34,8 +34,14 @@ class SpectrogramFeatures(object):
         magnitude, phase = librosa.magphase(fourier_transform)
         
         return {'magnitude': magnitude, 'phase': phase}
+    
+    @staticmethod
+    def get_mel_spectrogram(signal, sr):
+        mel_mag = librosa.feature.melspectrogram(y=signal, sr=sr, n_fft=1024, hop_length=512, n_mels=128)
+        mel_mag_db = librosa.power_to_db(mel_mag)
+        return mel_mag, mel_mag_db
 
-    def spectrogram_data(self):
+    def spectrogram_data(self, show_plot=False):
         """Separate a complex-valued spectrogram 
             D into its magnitude (S) 
             and phase (P) components, 
@@ -45,13 +51,16 @@ class SpectrogramFeatures(object):
         self.signal = self.data['signal']
         self.sr = self.data['source']
         
+        mel_mag, mel_mag_db = SpectrogramFeatures.get_mel_spectrogram(self.signal, self.sr)
+        
         self.spec = SpectrogramFeatures.get_spectrogram(self.signal, window='hamming')
         magnitude = self.spec['magnitude']
         
         log_spectrogram = np.log(magnitude)
         
-        plt.imshow(log_spectrogram, aspect='auto', origin='lower',)
-        plt.title('Raw audio spectrogram')
+        if show_plot:
+            plt.imshow(log_spectrogram, aspect='auto', origin='lower',)
+            plt.title('Raw audio spectrogram')
 
         return {'magnitude': magnitude,
                 'signal': self.signal,
@@ -60,4 +69,6 @@ class SpectrogramFeatures(object):
                 'min': self.signal.min(),
                 'log_spectrogram': log_spectrogram,
                 'sr': self.sr,
-                'plt': plt}
+                'mel_spectrogram': mel_mag,
+                'mel_spectrogram_db': mel_mag_db
+                }
